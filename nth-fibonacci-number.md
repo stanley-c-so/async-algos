@@ -141,8 +141,10 @@ function getNthFib(n) {
 
 - Trivia: Did you know that this problem can technically be solved in constant time and constant space using Binet's formula? (See https://en.wikipedia.org/wiki/Fibonacci_number#Binet's_formula)
 
+```
 F(n) = (phi^n - psi^n) / sqrt(5)
 
 where phi = (1 + sqrt(5))/2 and psi = -1/phi.
+```
 
 ---
