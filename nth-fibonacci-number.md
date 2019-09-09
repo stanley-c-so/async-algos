@@ -90,9 +90,9 @@ Your interviewee may not be familiar with memoization. Dedicate the most time to
 
 ```javascript
 function getNthFib(n, memo = {1: 0, 2: 1}) {
-	if (memo[n] !== undefined) return memo[n];
-	memo[n] = getNthFib(n - 1, memo) + getNthFib(n - 2, memo);
-	return memo[n];
+  if (memo[n] !== undefined) return memo[n];
+  memo[n] = getNthFib(n - 1, memo) + getNthFib(n - 2, memo);
+  return memo[n];
 }
 ```
 
@@ -112,7 +112,7 @@ There is a simple way to tackle this problem without using a memo (which would t
 
 ```javascript
 function getNthFib(n, f = 0, F = 1) {
-	return n === 1 ? f : getNthFib(n - 1, F, f + F)
+  return n === 1 ? f : getNthFib(n - 1, F, f + F)
 }
 ```
 
@@ -124,12 +124,12 @@ Of course, the same thing could be accomplished without any recursion at all:
 
 ```javascript
 function getNthFib(n) {
-	let f = 0;                      // base value
-	let F = 1;                      // base value
-	for (let i = 1; i < n; i++) {
-		[f, F] = [F, f + F];          // update values of f and F in one line of code using an array
+  let f = 0;                      // base value
+  let F = 1;                      // base value
+  for (let i = 1; i < n; i++) {
+    [f, F] = [F, f + F];          // update values of f and F in one line of code using an array
   }
-	return f;
+  return f;
 }
 ```
 
