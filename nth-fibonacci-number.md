@@ -1,98 +1,80 @@
-# Multiplicative Persistence
+# nth Fibonacci Number
 
 ---
 
 ## Interviewer Prompt
 
-Given a non-negative integer, write a function that returns its multiplicative persistence--the number of times you must multiply the digits in a number together until you reach a single digit product. 
+The Fibonacci Sequence is the series of numbers:
 
 ```
-Ex: 39 returns 3
-
-3 x 9 = 27
-2 x 7 = 14
-1 x 4 = 4
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
 ```
----
+
+The next number is found by adding up the two numbers before it.
+
+Write a function, `getNthFib`, that takes in a value, `n`, and returns the `n`th Fibonacci number.
 
 ## Example Output
 
 ```javascript
-persistence(39);  // 3 
-persistence(111); // 1
-persistence(1);   // 0
+getNthFib(1);  // 0
+getNthFib(2);  // 1
+getNthFib(3);  // 1 
+getNthFib(5);  // 3 
+getNthFib(10);  // 34 
+getNthFib(100);  // 218922995834555200000 
 ```
 
 ---
 
 ## Interviewer Guide
 
-This problem can be approached iteratively or recursively. Make sure you understand both solutions so that you can guide the interviewee no matter which option they take.
+This guide will walk you through three approaches. The interviewee will probably get the naive method very quickly, which makes two recursive calls. Here, focus on the 'O' of REACTO by explaining that optimization is important for this problem, since for large values of `n`, the naive implementation may run very slowly (and/or the stack may overflow). Point out that a lot of work is being repeated (for example, `getNthFib(10)` will call `getNthFib(9)` and `getNthFib(8)` - while it is calculating `getNthFib(9)`, the engine will need to calculate `getNthFib(8)` and `getNthFib(7)`... so already you can see some overlaps). Ask the interviewee if he/she is familiar with memoization: https://en.wikipedia.org/wiki/Memoization.
+
+Note that different people can have a different understanding of where the Fibonacci begins. (Is the 'first' Fibonacci number 0 or 1? Does n start at 0 or 1?) For our purposes, `getNthFib(1)` = 0, and `getNthFib(2)` = 1. All remaining values can be derived from those two. The user should not be feeding in values of `n` that are less than 1, such as 0.
 
 ---
 
 ### RE
 
-At this point the interviewer should be asking you questions to clarify the problem statement. If they are not, prompt them: _"Do you have any questions before we get started?"_ Some questions you may get.
-  - _How many digits can my input have?_ It can have any number of digits
-  - _What do I return if I input a single digit number?_ 0
-  - _Can my input ever be negative?_ No, do not worry about this case.
-  - _What base is my input in?_ Hm... you're getting a little ahead of yourself there. But it's base 10.
+At this point the interviewee should be asking you questions to clarify the problem statement. If they are not, prompt them: _"Do you have any questions before we get started?"_ Some questions you may get:
+  - _What are my base inputs?_ 1 and 2.
+  - _How big could n be?_ Potentially very large - that's why optimization matters!
+  - _Can my input ever be non-positive or non-integer?_ No, do not worry about this case.
+
+The interviewee should also be writing out the first few Fibonacci numbers, along with their `n` values. Check this against the Example Output above to make sure you're on the same page.
 
 ---
 
 ### AC
 
-Some people's thoughts might race to doing division and modulo math to find the individual components of the input, but there might be an easier way... If they do bring up math though, let them talk through that approach before suggesting string and number coercion (thank you JS for making this possible).
+As stated above, most interviewees will probably go straight to the naive solution. Even if your interviewee does not, make sure to ask about it to ensure that he/she understands it. Try to get through this within the first 10 minutes, so there is time for you to walk your interviewee through memoization.
 
 ---
 
 ### TO
 
+With the naive solution having been explored, make sure your interviewee understands why this implementation would be slow for large numbers of `n`. For example, if you try `getNthFib(100)` it will probably get your Chrome dev tools to stop responding...
+
 ---
 
 ### Answers to Common Questions
-
 
 ---
 
 ## Solution and Explanation (a)
 
-You're given a number, you need to break it down, multiply the parts, increment a count, rinse, and repeat. If you're thinking recursion, you're not wrong!
+This problem is often used as an introduction to recursion. By our base definitions, `getNthFib(1)` = 0, `getNthFib(2)` = 1, and for any other value of `n`, `getNthFib(n)` = `getNthFib(n - 1)` + `getNthFib(n - 2)`.
 
-What would be your base case? If your number is a single digit, you're done. You've had to do 0 rounds of multiplication.
+Therefore, the naive implementation is simple:
 
-Otherwise, you'll want to break apart your digits and start multiplying. Once you have a product, you'll want to feed it to your function again. Your result should be 1 + the number of times the resulting product needs to go through this process again.
-
----
-
-### Solution Code
+### Naive Solution Code
 
 ```javascript
-function persistence(num) {
-  const stringNum = String(num);
-  if (String(num).length === 1) return 0;
-  
-  // We can split the strings into an array and then multiply the values to return a product using a reduce function
-  // This works in JS because the engine sees two numbers of string data type and coerces them back to being numbers when you try to multiple them
-  const newNum = stringNum.split('').reduce((product, factor) => product * factor);
-  return 1 + persistence(newNum);
-}
-```
-
-If you're not a fan of the `Array.reduce()` method, here's a `for` loop with the same result.
-```javascript
-function persistence(num) {
-  const stringNum = String(num);
-  if (String(num).length === 1) return 0;
-  
-  let newNum = 1;
-  
-  for (let i = 0; i < stringNum.length; i++) {
-    newNum *= stringNum[i];
-  }
-  
-  return 1 + persistence(newNum);
+function getNthFib(n) {
+  if (n === 1) return 0;
+  if (n === 2) return 1;
+  return getNthFib(n - 1) + getNthFib(n - 2);
 }
 ```
 
@@ -100,26 +82,52 @@ function persistence(num) {
 
 ## Solution and Explanation (b)
 
-You can also implement an iterative solution. The approach here is to maintain a count that you increment every time you go through a cycle of multiplication and checks.
+Your interviewee may not be familiar with memoization. Dedicate the most time to explaining to your interviewee how it works. The idea is to 'cache' any pre-calculated values into some sort of store (such as a hash table) for quick reference to avoid having your engine rerun your algorithm for the same input twice.
+
+### Memoization Solution Code
+
+```javascript
+function getNthFib(n, memo = {1: 0, 2: 1}) {
+	if (memo[n] !== undefined) return memo[n];
+	memo[n] = getNthFib(n - 1, memo) + getNthFib(n - 2, memo);
+	return memo[n];
+}
+```
+
+Note that when a user calls `getNthFib`, the user normally only expects to input `n`. However, based on how this method works, we will need to pass the reference to `memo` back and forth among the recursive calls, so it needs to be an argument as well. That's why here, we make `memo` an optional argument with a default value of `{1: 0, 2: 1}` which is an object that stores our base values. (Another option instead of a default value in the parameters is to include a line that says `memo = memo || {1: 0, 2: 1}`. This way, if a `memo` argument was supplied, it remains untouched, but if it was not, then `memo` gets initialized.)
+
+The first line of the code checks whether our `memo` object already knows the answer for the given `n` key. If it does (because `memo[n]` is NOT undefined), then simply return the value stored at `memo[n]`. Otherwise, update the `memo` object by calculating and storing the sum of the two prior Fibonacci numbers into the `memo`, and then simply return the value you just stored at `memo[n]`. When referencing the two prior Fibonacci numbers using recursion, be sure to pass in the current state of your `memo` object as an argument.
+
+No matter where the engine is in the call stack, all references to `memo` are pointing to the same place in memory. The recursed calls to `getNthFib` are NOT storing their own individual `memo`s!
 
 ---
 
-### Solution Code
+## Solution and Explanation (c)
+
+There is a simple way to tackle this problem without using a memo (which would take up O(n) space)! This is a neat trick that uses recursion in a way that seems 'iterative':
+
+### 'Iterative' Solution Code
 
 ```javascript
-function persistence(num) {
-  let result = 0;
-  let stringNum = String(num);
-  
-  while (stringNum.length > 1) {
-    result++;
-    const product = stringNum.split('').reduce((total, factor) => total * factor);
-    
-    // Set stringNum to the new product. Cast the product back into a string again before you execute the while loop condition
-    stringNum = String(product);
+function getNthFib(n, f = 0, F = 1) {
+	return n === 1 ? f : getNthFib(n - 1, F, f + F)
+}
+```
+
+With this method, `n` effectively works like a counter. The optional arguments `f` and `F` work as placeholders for the current and next Fibonacci numbers, and are 'pre-loaded' with values of 0 and 1, respectively, by default. The final result, stored in `f`, is returned when `n` is equal to 1. Therefore, if the user invokes `getNthFib(1)`, the function is ready to return the default value of 0. If `n` is not 1, then the function is recursed, `n` is decremented, `F` takes the place of `f`, and `f + F` takes the place of `F`. Ultimately, the `getNthFib` function is run a total of `n` times, where the next Fibonacci number is calculated at every iteration.
+
+Of course, the same thing could be accomplished without any recursion at all:
+
+### True Iterative Solution Code
+
+```javascript
+function getNthFib(n) {
+	let f = 0;                      // base value
+	let F = 1;                      // base value
+	for (let i = 1; i < n; i++) {
+		[f, F] = [F, f + F];          // update values of f and F in one line of code using an array
   }
-  
-  return result;
+	return f;
 }
 ```
 
@@ -127,6 +135,12 @@ function persistence(num) {
 
 ## Summary
 
-- While we took advantage of a lot of JS quirks to get concise solutions, note that these shortcuts might not be available in other languages. You may have to more actively cast values to different types in order to get working solutions as you move between different data types to get our answer.
+- Optimization is important. While it will not necessarily be the largest focus in REACTO going forward, I chose the classic Fibonacci problem to showcase the variety of ways to approach it, to introduce the concept of memoization, and to demonstrate that sometimes iteration can be more efficient than recursion (to avoid blowing up the call stack)!
+
+- Trivia: Did you know that this problem can technically be solved in constant time and constant space using Binet's formula? (See https://en.wikipedia.org/wiki/Fibonacci_number#Binet's_formula)
+
+F(n) = (phi^n - psi^n) / sqrt(5)
+
+where phi = (1 + sqrt(5))/2 and psi = -1/phi.
 
 ---
