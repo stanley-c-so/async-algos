@@ -112,7 +112,9 @@ There is a simple way to tackle this problem without using a memo (which would t
 
 ```javascript
 function getNthFib(n, f = 0, F = 1) {
-  return n === 1 ? f : getNthFib(n - 1, F, f + F)
+  return n === 1
+    ? f
+    : getNthFib(n - 1, F, f + F)
 }
 ```
 
