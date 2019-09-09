@@ -60,6 +60,8 @@ With the naive solution having been explored, make sure your interviewee underst
 
 ### Answers to Common Questions
 
+N/A
+
 ---
 
 ## Solution and Explanation (a)
