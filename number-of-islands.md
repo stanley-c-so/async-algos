@@ -2,7 +2,9 @@
 
 ## Interviewer Prompt
 
-Given a 2D grid map of `1`s (land) and `0`s (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+Given a 2D array of `1`s (land) and `0`s (water), implement a function numIslands count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+![asdf](./number-of-islands_pic.png)
 
 ## Example Output
 
@@ -84,6 +86,10 @@ F(n) = (phi^n - psi^n) / sqrt(5)
 
 where phi = (1 + sqrt(5))/2 and psi = -1/phi.
 ``` -->
+
+## Credits
+
+- This .md was a collaboration between Jing Cao (github.com/peoplemakeculture) and Stanley So (github.com/stanley-c-so)
 
 ## References
 
