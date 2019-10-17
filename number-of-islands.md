@@ -36,10 +36,10 @@ console.log(numIslands(grid));    // 3
 
 ## Interviewer Guide
 
-- *If your peer is stuck*, ask them if they know how to traverse an undirected graph - that may kickstart some ideas.
-- The key to this problem is to write a good helper function. The main function should traverse every position in the matrix, and if it happens to find a land, it should invoke the helper function at that position.
-- The purpose of the helper function is to "process" the entire island by traversing it and marking it as "visited" in some way so as not to be double counted as a new island by the main function. (That way, when the main function finds an unvisited land, it will always be a new, distinct island.) Make sure your peer's code does not have duplicate island counting!
-- As your peer works on the helper function, your peer may come up with a recursive solution by using recursive algorith to conduct a Breadth-First Search (BFS) or a Depth-First Search (DFS). Only after the solution is fully fleshed out, you can nudge your peer toward an iterative (i.e. non-recursive) solution so as not to burden the call stack.
+- __If your peer is stuck__, ask them if they know how to traverse an undirected graph - that may kickstart some ideas.
+- The key to this problem is to __write a good helper function__. __The main function should traverse every position in the matrix__, and if it happens to find a land, it should invoke the helper function at that position.
+- The purpose of the helper function is to __"process" the entire island by traversing it and marking it as "visited" in some way so as not to be double counted as a new island by the main function__. (That way, when the main function finds an unvisited land, it will always be a new, distinct island.) Make sure your peer's code does not have duplicate island counting!
+- As your peer works on the helper function, your peer may come up with a recursive algorithm to conduct a Breadth-First Search (BFS) or a Depth-First Search (DFS). Only after the solution is fully fleshed out, you can nudge your peer toward an iterative (i.e. non-recursive) solution so as not to burden the call stack.
 - Make sure that your peer’s code properly handles out-of-bound indices when trying to traverse adjacent cells in `grid` (either by avoiding them altogether as recursive inputs, or returning before attempting to access them from the matrix).
 - Any solution with time complexity greater than `O(n⋅m)` (where `n` and `m` are the dimensions of `grid`) is not optimal.
 
