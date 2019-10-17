@@ -68,7 +68,7 @@ var numIslands = function(grid) {
     let count = 0;
     for (let row = 0; row < grid.length; row++) {           // iterate through every row and col
         for (let col = 0; col < grid[0].length; col++) {
-           if (grid[row][col] === '1') {                    // if land is found, it must be a new island
+           if (grid[row][col] === 1) {                      // if land is found, it must be a new island
                count++                                      // so, increase the island count
                helper(grid, row, col);                      // and turn that entire island into water
            }
@@ -81,9 +81,9 @@ function helper(grid, row, col) {
     if (                                            // if:
         !(row >= 0 && row < grid.length)            // row coords are out of bounds...
         || !(col >= 0 && col < grid[0].length)      // ...OR col coords are out of bounds...
-        || grid[row][col] !== '1'                   // ... OR [row][col] does not point to land...
+        || grid[row][col] !== 1                     // ... OR [row][col] does not point to land...
     ) return;                                       // then do not continue
-    grid[row][col] = '0';         // turn land at current coords into water (or whatever else)
+    grid[row][col] = 0;           // turn land at current coords into water (or whatever else)
     helper(grid, row - 1, col);   // recurse up
     helper(grid, row + 1, col);   // recurse down
     helper(grid, row, col - 1);   // recurse left
@@ -100,7 +100,7 @@ var numIslands = function(grid) {
     let count = 0;
     for (let row = 0; row < grid.length; row++) {           // iterate through every row and col
         for (let col = 0; col < grid[0].length; col++) {
-           if (grid[row][col] === '1') {                    // if land is found, it must be a new island
+           if (grid[row][col] === 1) {                      // if land is found, it must be a new island
                count++                                      // so, increase the island count
                helper(grid, row, col);                      // and turn that entire island into water
            }
@@ -116,9 +116,9 @@ function helper(grid, row, col) {
       if (                                                    // if:
         (currentRow >= 0 && currentRow < grid.length)         // currentRow coords are in bounds...
         && (currentCol >= 0 && currentCol < grid[0].length)   // ...AND currentCol coords are in bounds...
-        && grid[currentRow][currentCol] === '1'               // ...AND [currentRow][currentCol] points to land 
+        && grid[currentRow][currentCol] === 1                 // ...AND [currentRow][currentCol] points to land 
       ) {
-        grid[currentRow][currentCol] = '0';         // turn land at current coords into water (or whatever else)
+        grid[currentRow][currentCol] = 0;           // turn land at current coords into water (or whatever else)
         queue.push([currentRow - 1, currentCol]);   // next, check up
         queue.push([currentRow + 1, currentCol]);   // next, check down
         queue.push([currentRow, currentCol - 1]);   // next, check left
@@ -141,8 +141,8 @@ function isInBounds (grid, row, col) {
 }
 
 function helper(grid, row, col) {
-    if (grid[row][col] !== '1') return;
-    grid[row][col] = '0';
+    if (grid[row][col] !== 1) return;
+    grid[row][col] = 0;
     if (isInBounds(grid, row - 1, col)) helper(grid, row - 1, col);
     if (isInBounds(grid, row + 1, col)) helper(grid, row + 1, col);
     if (isInBounds(grid, row, col - 1)) helper(grid, row, col - 1);
@@ -161,8 +161,8 @@ function helper(grid, row, col) {
     const queue = [[row, col]];
     while (queue.length) {
       [currentRow, currentCol] = queue.shift();
-      if (grid[currentRow][currentCol] === '1') {
-        grid[currentRow][currentCol] = '0';
+      if (grid[currentRow][currentCol] === 1) {
+        grid[currentRow][currentCol] = 0;
         pushIfInBounds(grid, currentRow - 1, currentCol, queue);
         pushIfInBounds(grid, currentRow + 1, currentCol, queue);
         pushIfInBounds(grid, currentRow, currentCol - 1, queue);
@@ -188,3 +188,4 @@ Key concepts in this problem:
 ## References
 
 - Problem adapted from LeetCode #200 (medium): https://leetcode.com/problems/number-of-islands/
+- Note that in the LeetCode problem, the matrix values are `'0'` and `'1'` instead of `0` and `1`.
