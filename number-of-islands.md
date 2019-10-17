@@ -2,7 +2,7 @@
 
 ## Interviewer Prompt
 
-Given a 2D array of `1`s (land) and `0`s (water), implement a function numIslands count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+Given a matrix (2D array) of `1`s (land) and `0`s (water), implement a function `numIslands` count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
 
 For example, in the image below, there are 6 different islands highlighted in different colors to distinguish them:
 
@@ -36,9 +36,12 @@ console.log(numIslands(grid));    // 3
 
 ## Interviewer Guide
 
-<!-- This guide will walk you through three approaches. The interviewee will probably get the naive method very quickly, which makes two recursive calls. Here, focus on the 'O' of REACTO by explaining that optimization is important for this problem, since for large values of `n`, the naive implementation may run very slowly (and/or the stack may overflow). Point out that a lot of work is being repeated (for example, `getNthFib(10)` will call `getNthFib(9)` and `getNthFib(8)` - while it is calculating `getNthFib(9)`, the engine will need to calculate `getNthFib(8)` and `getNthFib(7)`... so already you can see some overlaps). Ask the interviewee if he/she is familiar with memoization: https://en.wikipedia.org/wiki/Memoization.
-
-Note that different people can have a different understanding of where the Fibonacci begins. (Is the 'first' Fibonacci number 0 or 1? Does n start at 0 or 1?) For our purposes, `getNthFib(1)` = 0, and `getNthFib(2)` = 1. All remaining values can be derived from those two. The user should not be feeding in values of `n` that are less than 1, such as 0. -->
+- *If your peer is stuck*, ask them if they know how to traverse an undirected graph - that may kickstart some ideas.
+- The key to this problem is to write a good helper function. The main function should traverse every position in the matrix, and if it happens to find a land, it should invoke the helper function at that position.
+- The purpose of the helper function is to "process" the entire island by traversing it and marking it as "visited" in some way so as not to be double counted as a new island by the main function. (That way, when the main function finds an unvisited land, it will always be a new, distinct island.) Make sure your peer's code does not have duplicate island counting!
+- As your peer works on the helper function, your peer may come up with a recursive solution by using recursive algorith to conduct a Breadth-First Search (BFS) or a Depth-First Search (DFS). Only after the solution is fully fleshed out, you can nudge your peer toward an iterative (i.e. non-recursive) solution so as not to burden the call stack.
+- Make sure that your peer’s code properly handles out-of-bound indices when trying to traverse adjacent cells in `grid` (either by avoiding them altogether as recursive inputs, or returning before attempting to access them from the matrix).
+- Any solution with time complexity greater than `O(n⋅m)` (where `n` and `m` are the dimensions of `grid`) is not optimal.
 
 ### RE
 
