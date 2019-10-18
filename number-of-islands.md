@@ -2,7 +2,7 @@
 
 ## Interviewer Prompt
 
-Given a matrix (2D array) of `1`s (land) and `0`s (water), implement a function `numIslands` to count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+Given a binary matrix (2D array) of `1`s (land) and `0`s (water), implement a function `numIslands` to count the number of islands. An island is a block of land surrounded by water. It can be formed by connecting adjacent lands horizontally or vertically, but NOT diagonally. You may assume all four edges of the grid are all surrounded by water.
 
 For example, in the image below, there are 6 different islands highlighted in different colors to distinguish them:
 
@@ -36,10 +36,9 @@ console.log(numIslands(grid));    // 3
 
 ## Interviewer Guide
 
-- If your peer is stuck, ask them if they know how to traverse an undirected graph - that may kickstart some ideas.
-- As your peer works on the helper function (see __AC__ section), your peer may come up with a *recursive* algorithm to conduct a Breadth-First Search (BFS) or a Depth-First Search (DFS). If this happens, only after the solution is fully fleshed out, you can nudge your peer toward an iterative (i.e. non-recursive) solution so as not to burden the call stack.
+- If your partner is stuck, ask them what they know about Breadth-First Search (BFS) or a Depth-First Search (DFS). The key to this question is understanding that once they find a "land" `1` in the grid, they need to mark the adjacent `1`s recursively, or with a queue. The can be done with a helper function using either BFS or DFS.
+- As your partner works on the helper function (see __AC__ section), your peer may come up with a *recursive* algorithm to conduct a Breadth-First Search (BFS) or a Depth-First Search (DFS). If this happens, only after the solution is fully fleshed out, you can nudge your peer toward an iterative (i.e. non-recursive) solution so as not to burden the call stack.
 - Make sure that your peer’s code properly handles out-of-bound indices when trying to traverse adjacent cells in `grid` (either by avoiding them altogether as recursive inputs, or returning before attempting to access them from the matrix).
-- Any solution with time complexity greater than `O(n⋅m)` (where `n` and `m` are the dimensions of `grid`) is not optimal.
 
 ### RE
 
