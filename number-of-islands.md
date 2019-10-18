@@ -37,8 +37,8 @@ console.log(numIslands(grid));    // 3
 ## Interviewer Guide
 
 - If your partner is stuck, ask them what they know about Breadth-First Search (BFS) or a Depth-First Search (DFS). The key to this question is understanding that once they find a "land" `1` in the grid, they need to mark the adjacent `1`s recursively, or with a queue. The can be done with a helper function using either BFS or DFS.
-- As your partner works on the helper function (see __AC__ section), your peer may come up with a *recursive* algorithm to conduct a Breadth-First Search (BFS) or a Depth-First Search (DFS). If this happens, only after the solution is fully fleshed out, you can nudge your peer toward an iterative (i.e. non-recursive) solution so as not to burden the call stack.
-- Make sure that your peer’s code properly handles out-of-bound indices when trying to traverse adjacent cells in `grid` (either by avoiding them altogether as recursive inputs, or returning before attempting to access them from the matrix).
+- As your partner works on the helper function (see __AC__ section), your partner may come up with a *recursive* algorithm to conduct a Breadth-First Search (BFS) or a Depth-First Search (DFS). If this happens, only after the solution is fully fleshed out, you can nudge your partner toward an iterative (i.e. non-recursive) solution so as not to burden the call stack.
+- Make sure that your partner's code properly handles out-of-bound indices when trying to traverse adjacent cells in `grid` (either by avoiding them altogether as recursive inputs, or returning before attempting to access them from the matrix).
 
 ### RE
 
@@ -49,7 +49,7 @@ At this point the interviewee should be asking you questions to clarify the prob
 ### AC
 
 - The key to this problem is to __write a good helper function__. __The main function should traverse every position in the matrix__, and if it happens to find a land, it should invoke the helper function at that position. __By passing the reference to `grid` to your helper function, any mutations made by the helper function updates the `grid` object in real time__.
-- __The purpose of the helper function is to "process" the entire island by traversing it and marking it as "visited" in some way so as not to be double counted as a new island by the main function__. (That way, when the main function finds an unvisited land, it will always be a new, distinct island.) Make sure your peer's code does not have duplicate island counting!
+- __The purpose of the helper function is to "process" the entire island by traversing it and marking it as "visited" in some way so as not to be double counted as a new island by the main function__. (That way, when the main function finds an unvisited land, it will always be a new, distinct island.) Make sure your partner's code does not have duplicate island counting!
 
 ### TO
 
@@ -180,11 +180,11 @@ Key concepts in this problem:
 - micro-optimization by checking validity (being in-bounds)
 - potential edge cases arising from cells being enqueued multiple times, depending on implementation
 
-## Credits
-
-- This .md was a collaboration between Jing Cao (github.com/peoplemakeculture) and Stanley So (github.com/stanley-c-so)
-
 ## References
 
 - Problem adapted from LeetCode #200 (medium): https://leetcode.com/problems/number-of-islands/
 - Note that in the LeetCode problem, the matrix values are `'0'` and `'1'` instead of `0` and `1`.
+
+## Credits
+
+- This .md was a collaboration between Jing Cao (github.com/peoplemakeculture) and Stanley So (github.com/stanley-c-so)
