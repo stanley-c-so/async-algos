@@ -53,7 +53,7 @@ At this point the interviewee should be asking you questions to clarify the prob
 
 ### TO
 
-- Time complexity: `O(n⋅m)` because every cell in the grid will need to be traversed once by the main function, and even in the extreme case that the majority of the cells will be re-examined by the helper function after having been visited already, there will be at most 4 (i.e. a constant number) of re-examinations of that particular cell triggered by the initial visit to the cell's 4 neighbors.
+- Time complexity: `O(n⋅m)` (the dimensions of the grid) because every cell in the grid will need to be traversed once by the main function, and even in the extreme case that the majority of the cells will be re-examined by the helper function after having been visited already, there will be at most 4 (i.e. a constant number) of re-examinations of that particular cell triggered by the initial visit to the cell's 4 neighbors.
 - Space complexity: `O(n⋅m)` (i.e. the same as the time complexity, which follows the traversal of the entire grid) because as land is traversed, neighboring lands will either occupy the call stack or occupy space in the queue depending on your implementation.
 
 ## Solution and Explanation
