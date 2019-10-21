@@ -140,7 +140,7 @@ function isInBounds (grid, row, col) {      // for checking if a given position 
 }
 
 function helper(grid, row, col) {
-    if (grid[row][col] !== 1) return;
+    if (grid[row][col] !== 1) return;       // helper should still check if the coordinates point to land
     grid[row][col] = 0;
     if (isInBounds(grid, row - 1, col)) helper(grid, row - 1, col);   // if not in bounds, do not even recurse
     if (isInBounds(grid, row + 1, col)) helper(grid, row + 1, col);
@@ -160,7 +160,7 @@ function helper(grid, row, col) {
     const queue = [[row, col]];
     while (queue.length) {
       [currentRow, currentCol] = queue.shift();
-      if (grid[currentRow][currentCol] === 1) {
+      if (grid[currentRow][currentCol] === 1) {       // helper should still check if the coordinates point to land
         grid[currentRow][currentCol] = 0;
         pushIfInBounds(grid, currentRow - 1, currentCol, queue);    // if not in bounds, do not even push into queue
         pushIfInBounds(grid, currentRow + 1, currentCol, queue);
