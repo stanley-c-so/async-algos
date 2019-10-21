@@ -37,7 +37,7 @@ console.log(numIslands(grid));    // 3
 ## Interviewer Guide
 
 - If your partner is stuck, ask them what they know about Breadth-First Search (BFS) or a Depth-First Search (DFS). The key to this question is understanding that once they find a "land" `1` in the grid, they need to mark the adjacent `1`s recursively, or with a queue. The can be done with a helper function using either BFS or DFS.
-- As your partner works on the helper function (see __AC__ section), your partner may come up with a *recursive* algorithm to conduct a Breadth-First Search (BFS) or a Depth-First Search (DFS). If this happens, only after the solution is fully fleshed out, you can nudge your partner toward an iterative (i.e. non-recursive) solution so as not to burden the call stack.
+- As your partner works on the helper function (see __AC__ section), your partner may come up with a DFS algorithm using recursion (or a stack), or a BFS algorithm using a queue. If you have time after the solution is fully fleshed out, you can ask your partner how they might approach this problem the other way.
 - Make sure that your partner's code properly handles out-of-bound indices when trying to traverse adjacent cells in `grid` (either by avoiding them altogether as recursive inputs, or returning before attempting to access them from the matrix).
 
 ### RE
@@ -58,9 +58,9 @@ At this point the interviewee should be asking you questions to clarify the prob
 
 ## Solution and Explanation
 
-In the recursive solution, the helper function only inspects one cell at a time. If that cell is in bounds and is a land, it turns the land into water (you can turn the land into anything else too, as long as it does not remain land) and then runs a recursive call at each of the cell's 4 neighbors. (To save stack space, you may prefer to check if each neighbor is in bounds before recursing at all, rather than checking it at the beginning of the helper function.)
-
 ### Recursive Solution Code
+
+In the recursive solution, the helper function only inspects one cell at a time. If that cell is in bounds and is a land, it turns the land into water (you can turn the land into anything else too, as long as it does not remain land) and then runs a recursive call at each of the cell's 4 neighbors. (To save stack space, you may prefer to check if each neighbor is in bounds before recursing at all, rather than checking it at the beginning of the helper function.)
 
 ```javascript
 var numIslands = function(grid) {
@@ -90,9 +90,9 @@ function helper(grid, row, col) {
 }
 ```
 
-In the iterative solution, the helper function again inspects only one cell at a time, beginning with a queue pre-loaded with the initial cell. While the queue has elements, if the current element is a land, the function turns that element into water (or whatever else) and then pushes the cell's 4 neighbors into the queue. (To save queue space, you may prefer to check if each neighbor is in bounds before pushing it into the queue at all, rather than checking it as you pop it out of the queue.)
-
 ### Iterative Solution Code
+
+In the iterative solution, the helper function again inspects only one cell at a time, beginning with a queue pre-loaded with the initial cell. While the queue has elements, if the current element is a land, the function turns that element into water (or whatever else) and then pushes the cell's 4 neighbors into the queue. (To save queue space, you may prefer to check if each neighbor is in bounds before pushing it into the queue at all, rather than checking it as you pop it out of the queue.)
 
 ```javascript
 var numIslands = function(grid) {
@@ -127,22 +127,22 @@ function helper(grid, row, col) {
 }
 ```
 
-Notice that in both methods you can either check if a neighbor is in bounds before or after recursing or pushing it into your queue. Arguably this is a tradeoff between readability and efficiency. Some programmers may even prefer to write another helper function for testing validity, allowing them to shorten the clunky `if` condition inside the helper and taking up less space (see below). However, it is better to check if the current element is a land _after_ you dequeue it as blocks of land will result in the same cells being placed in queue multiple times, and therefore the cell will no longer be land after the first time it is processed (and its neighbors should not be analyzed).
-
 ### Variations
 
+Notice that in both methods you can either check if a neighbor is in bounds before or after recursing or pushing it into your queue. Arguably this is a tradeoff between readability and efficiency. Some programmers may even prefer to write another helper function for testing validity, allowing them to shorten the clunky `if` condition inside the helper and taking up less space (see below). However, it is better to check if the current element is a land _after_ you dequeue it, as rectangular blocks of land will inevitably result in the same cells being placed in queue multiple times, and therefore the cell will no longer be land after the first time it is processed (and its neighbors should not be analyzed).
+
 ```javascript
-function isInBounds (grid, row, col) {
-  return (                                  // a given (row, col) is in bounds if:
-    (row >= 0 && row < grid.length)         // row coords are in bounds...
-    && (col >= 0 && col < grid[0].length)   // ...AND col coords are in bounds
+function isInBounds (grid, row, col) {      // for checking if a given position is in bounds
+  return (
+    (row >= 0 && row < grid.length)
+    && (col >= 0 && col < grid[0].length)
   );
 }
 
 function helper(grid, row, col) {
     if (grid[row][col] !== 1) return;
     grid[row][col] = 0;
-    if (isInBounds(grid, row - 1, col)) helper(grid, row - 1, col);
+    if (isInBounds(grid, row - 1, col)) helper(grid, row - 1, col);   // if not in bounds, do not even recurse
     if (isInBounds(grid, row + 1, col)) helper(grid, row + 1, col);
     if (isInBounds(grid, row, col - 1)) helper(grid, row, col - 1);
     if (isInBounds(grid, row, col + 1)) helper(grid, row, col + 1);
@@ -162,7 +162,7 @@ function helper(grid, row, col) {
       [currentRow, currentCol] = queue.shift();
       if (grid[currentRow][currentCol] === 1) {
         grid[currentRow][currentCol] = 0;
-        pushIfInBounds(grid, currentRow - 1, currentCol, queue);
+        pushIfInBounds(grid, currentRow - 1, currentCol, queue);    // if not in bounds, do not even push into queue
         pushIfInBounds(grid, currentRow + 1, currentCol, queue);
         pushIfInBounds(grid, currentRow, currentCol - 1, queue);
         pushIfInBounds(grid, currentRow, currentCol + 1, queue);
@@ -187,4 +187,4 @@ Key concepts in this problem:
 
 ## Credits
 
-- This .md was a collaboration between Jing Cao (github.com/peoplemakeculture) and Stanley So (github.com/stanley-c-so)
+- This .md was a collaboration between Jing Cao (github.com/peoplemakeculture) of GH and Stanley So (github.com/stanley-c-so) of FSA!
