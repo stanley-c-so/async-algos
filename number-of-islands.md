@@ -184,6 +184,7 @@ Key concepts in this problem:
 
 - Problem adapted from LeetCode #200 (medium): https://leetcode.com/problems/number-of-islands/
 - Note that in the LeetCode problem, the matrix values are `'0'` and `'1'` instead of `0` and `1`.
+- The algorithm used by the helper function is known as 'Flood fill': https://en.wikipedia.org/wiki/Flood_fill
 
 ## Credits
 
