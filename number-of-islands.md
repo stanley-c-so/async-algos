@@ -63,7 +63,7 @@ At this point the interviewee should be asking you questions to clarify the prob
 In the recursive solution, the helper function only inspects one cell at a time. If that cell is in bounds and is a land, it turns the land into water (you can turn the land into anything else too, as long as it does not remain land) and then runs a recursive call at each of the cell's 4 neighbors. (To save stack space, you may prefer to check if each neighbor is in bounds before recursing at all, rather than checking it at the beginning of the helper function.)
 
 ```javascript
-var numIslands = function(grid) {
+function numIslands (grid) {
     let count = 0;
     for (let row = 0; row < grid.length; row++) {           // iterate through every row and col
         for (let col = 0; col < grid[0].length; col++) {
@@ -76,7 +76,7 @@ var numIslands = function(grid) {
     return count;
 };
 
-function helper(grid, row, col) {
+function helper (grid, row, col) {
     if (                                            // if:
         !(row >= 0 && row < grid.length)            // row coords are out of bounds...
         || !(col >= 0 && col < grid[0].length)      // ...OR col coords are out of bounds...
@@ -95,7 +95,7 @@ function helper(grid, row, col) {
 In the iterative solution, the helper function again inspects only one cell at a time, beginning with a queue pre-loaded with the initial cell. While the queue has elements, if the current element is a land, the function turns that element into water (or whatever else) and then pushes the cell's 4 neighbors into the queue. (To save queue space, you may prefer to check if each neighbor is in bounds before pushing it into the queue at all, rather than checking it as you pop it out of the queue.)
 
 ```javascript
-var numIslands = function(grid) {
+function numIslands (grid) {
     let count = 0;
     for (let row = 0; row < grid.length; row++) {           // iterate through every row and col
         for (let col = 0; col < grid[0].length; col++) {
@@ -108,7 +108,7 @@ var numIslands = function(grid) {
     return count;
 };
 
-function helper(grid, row, col) {
+function helper (grid, row, col) {
     const queue = [[row, col]];
     while (queue.length) {
       [currentRow, currentCol] = queue.shift();
@@ -139,7 +139,7 @@ function isInBounds (grid, row, col) {      // for checking if a given position 
   );
 }
 
-function helper(grid, row, col) {
+function helper (grid, row, col) {
     if (grid[row][col] !== 1) return;       // helper should still check if the coordinates point to land
     grid[row][col] = 0;
     if (isInBounds(grid, row - 1, col)) helper(grid, row - 1, col);   // if not in bounds, do not even recurse
@@ -156,7 +156,7 @@ function pushIfInBounds (grid, row, col, queue) {
   }
 }
 
-function helper(grid, row, col) {
+function helper (grid, row, col) {
     const queue = [[row, col]];
     while (queue.length) {
       [currentRow, currentCol] = queue.shift();
