@@ -36,15 +36,16 @@ console.log(numIslands(grid));    // 3
 
 ## Interviewer Guide
 
-- If your partner is stuck, ask them what they know about Breadth-First Search (BFS) or a Depth-First Search (DFS). The key to this question is understanding that once they find a "land" `1` in the grid, they need to mark the adjacent `1`s recursively, or with a queue. The can be done with a helper function using either BFS or DFS.
-- As your partner works on the helper function (see __AC__ section), your partner may come up with a DFS algorithm using recursion (or a stack), or a BFS algorithm using a queue. If you have time after the solution is fully fleshed out, you can ask your partner how they might approach this problem the other way.
-- Make sure that your partner's code properly handles out-of-bound indices when trying to traverse adjacent cells in `grid` (either by avoiding them altogether as recursive inputs, or returning before attempting to access them from the matrix).
+- If your partner is stuck, ask them what they know about Depth-First Search (DFS). The key to this question is understanding that once they find a "land" `1` in the grid, they need to mark the adjacent `1`s recursively, or with a stack. The can be done with a helper function that uses a stack, or a helper function that is recursive. (This just goes to show that recursive solutions are ultimately still stack-based solutions - they use the call stack itself as a stack!)
+- If you have time after the solution is fully fleshed out, you can ask your partner how they might approach this problem the other way.
+- Make sure that your partner's code properly handles out-of-bound indices when trying to traverse adjacent cells in `grid` (either by avoiding them altogether as recursive inputs, or returning before attempting to access them from the matrix). JavaScript is relatively forgiving, but other languages may crash if you go out of bounds.
+- NOTE: Did your partner attempt to solve this with Breadth-First Search or a queue? This is still a valid approach, but think about why this might not be desirable. Does BFS actually offer any advantages here over DFS?
 
 ### RE
 
 At this point the interviewee should be asking you questions to clarify the problem statement. If they are not, prompt them: _"Do you have any questions before we get started?"_ Some questions you may get:
   - _Any strange inputs?_ You can assume that `grid` is a proper 2D array with elements that are either `0` or `1`. You can assume that all subarrays (rows) have equal length. However, what if the grid is `1 x m`? `1 x 1`? `0 x 0`? Will your interviewee's solution break?
-  - _Should I be mutating the input?_ For our purposes, that's fine. If for some reason you wanted to preserve the original input grid, you could tweak your algorithm by making a deep copy of the input and performing all operations on the deep copy. Either way, space complexity will still be proportional to the area of the grid, because even if you mutate the input, you will either build up the call stack (with a recursive solution) or occupy space in your iterative queue.
+  - _Should I be mutating the input?_ For our purposes, that's fine. If for some reason you wanted to preserve the original input grid, you could tweak your algorithm by making a deep copy of the input and performing all operations on the deep copy. Either way, space complexity will still be proportional to the area of the grid, because even if you mutate the input, you will either build up the call stack (with a recursive solution) or occupy space in your iterative stack.
 
 ### AC
 
@@ -54,7 +55,7 @@ At this point the interviewee should be asking you questions to clarify the prob
 ### TO
 
 - Time complexity: `O(n⋅m)` (the dimensions of the grid) because every cell in the grid will need to be traversed once by the main function, and even in the extreme case that the majority of the cells will be re-examined by the helper function after having been visited already, there will be at most 4 (i.e. a constant number) of re-examinations of that particular cell triggered by the initial visit to the cell's 4 neighbors.
-- Space complexity: `O(n⋅m)` (i.e. the same as the time complexity, which follows the traversal of the entire grid) because as land is traversed, neighboring lands will either occupy the call stack or occupy space in the queue depending on your implementation.
+- Space complexity: `O(n⋅m)` (i.e. the same as the time complexity, which follows the traversal of the entire grid) because as land is traversed, neighboring lands will either occupy the call stack or occupy space in the iterative stack depending on your implementation.
 
 ## Solution and Explanation
 
@@ -77,11 +78,11 @@ function numIslands (grid) {
 };
 
 function helper (grid, row, col) {
-    if (                                            // if:
-        !(row >= 0 && row < grid.length)            // row coords are out of bounds...
-        || !(col >= 0 && col < grid[0].length)      // ...OR col coords are out of bounds...
-        || grid[row][col] !== 1                     // ... OR [row][col] does not point to land...
-    ) return;                                       // then do not continue
+    if (                                          // if:
+        !(row >= 0 && row < grid.length) ||       // row coords are out of bounds...
+        !(col >= 0 && col < grid[0].length) ||    // ...OR col coords are out of bounds...
+        grid[row][col] !== 1                      // ... OR [row][col] does not point to land...
+    ) return;                                     // then do not continue
     grid[row][col] = 0;           // turn land at current coords into water (or whatever else)
     helper(grid, row - 1, col);   // recurse up
     helper(grid, row + 1, col);   // recurse down
@@ -92,7 +93,7 @@ function helper (grid, row, col) {
 
 ### Iterative Solution Code
 
-In the iterative solution, the helper function again inspects only one cell at a time, beginning with a queue pre-loaded with the initial cell. While the queue has elements, if the current element is a land, the function turns that element into water (or whatever else) and then pushes the cell's 4 neighbors into the queue. (To save queue space, you may prefer to check if each neighbor is in bounds before pushing it into the queue at all, rather than checking it as you pop it out of the queue.)
+In the iterative solution, the helper function again inspects only one cell at a time, beginning with a stack pre-loaded with the initial cell. While the stack has elements, if the current element is a land, the function turns that element into water (or whatever else) and then pushes the cell's 4 neighbors into the stack. (To save stack space, you may prefer to check if each neighbor is in bounds before pushing it into the stack at all, rather than checking it as you pop it out of the stack.)
 
 ```javascript
 function numIslands (grid) {
@@ -109,19 +110,19 @@ function numIslands (grid) {
 };
 
 function helper (grid, row, col) {
-    const queue = [[row, col]];
-    while (queue.length) {
-      [currentRow, currentCol] = queue.shift();
+    const stack = [[row, col]];
+    while (stack.length) {
+      [currentRow, currentCol] = stack.pop();
       if (                                                    // if:
-        (currentRow >= 0 && currentRow < grid.length)         // currentRow coords are in bounds...
-        && (currentCol >= 0 && currentCol < grid[0].length)   // ...AND currentCol coords are in bounds...
-        && grid[currentRow][currentCol] === 1                 // ...AND [currentRow][currentCol] points to land 
+        (currentRow >= 0 && currentRow < grid.length) &&      // currentRow coords are in bounds...
+        (currentCol >= 0 && currentCol < grid[0].length) &&   // ...AND currentCol coords are in bounds...
+        grid[currentRow][currentCol] === 1                    // ...AND [currentRow][currentCol] points to land 
       ) {
         grid[currentRow][currentCol] = 0;           // turn land at current coords into water (or whatever else)
-        queue.push([currentRow - 1, currentCol]);   // next, check up
-        queue.push([currentRow + 1, currentCol]);   // next, check down
-        queue.push([currentRow, currentCol - 1]);   // next, check left
-        queue.push([currentRow, currentCol + 1]);   // next, check right
+        stack.push([currentRow - 1, currentCol]);   // next, check up
+        stack.push([currentRow + 1, currentCol]);   // next, check down
+        stack.push([currentRow, currentCol - 1]);   // next, check left
+        stack.push([currentRow, currentCol + 1]);   // next, check right
       }
     }
 }
@@ -129,45 +130,47 @@ function helper (grid, row, col) {
 
 ### Variations
 
-Notice that in both methods you can either check if a neighbor is in bounds before or after recursing or pushing it into your queue. Arguably this is a tradeoff between readability and efficiency. Some programmers may even prefer to write another helper function for testing validity, allowing them to shorten the clunky `if` condition inside the helper and taking up less space (see below). However, it is better to check if the current element is a land _after_ you dequeue it, as rectangular blocks of land will inevitably result in the same cells being placed in queue multiple times, and therefore the cell will no longer be land after the first time it is processed (and its neighbors should not be analyzed).
+Notice that in both methods you can either check if a neighbor is in bounds and contains land before or after recursing or pushing it into your stack. Arguably this is a tradeoff between readability and efficiency. Some programmers may even prefer to write another helper function for testing validity, allowing them to shorten the clunky `if` condition inside the helper and taking up less space (see below).
 
 ```javascript
-function isInBounds (grid, row, col) {      // for checking if a given position is in bounds
+function isInBoundsAndContainsLand (grid, row, col) {     // for checking if a given position is in bounds and contains land
   return (
-    (row >= 0 && row < grid.length)
-    && (col >= 0 && col < grid[0].length)
+    (row >= 0 && row < grid.length) &&
+    (col >= 0 && col < grid[0].length) &&
+    grid[row][col] === 1
   );
 }
 
 function helper (grid, row, col) {
-    if (grid[row][col] !== 1) return;       // helper should still check if the coordinates point to land
-    grid[row][col] = 0;
-    if (isInBounds(grid, row - 1, col)) helper(grid, row - 1, col);   // if not in bounds, do not even recurse
-    if (isInBounds(grid, row + 1, col)) helper(grid, row + 1, col);
-    if (isInBounds(grid, row, col - 1)) helper(grid, row, col - 1);
-    if (isInBounds(grid, row, col + 1)) helper(grid, row, col + 1);
+  grid[row][col] = 0;
+  if (isInBoundsAndContainsLand(grid, row - 1, col)) helper(grid, row - 1, col);    // only recurse if in bounds and contains land
+  if (isInBoundsAndContainsLand(grid, row + 1, col)) helper(grid, row + 1, col);
+  if (isInBoundsAndContainsLand(grid, row, col - 1)) helper(grid, row, col - 1);
+  if (isInBoundsAndContainsLand(grid, row, col + 1)) helper(grid, row, col + 1);
 }
 ```
 
 ```javascript
-function pushIfInBounds (grid, row, col, queue) {
-  if (row >= 0 && row < grid.length && col >= 0 && col < grid[0].length) {
-    queue.push([row, col]);
+function pushIfInBoundsAndContainsLand (grid, row, col, stack) {        // for checking if a given position is in bounds and contains land
+  if (
+    (row >= 0 && row < grid.length) && 
+    (col >= 0 && col < grid[0].length) &&
+    grid[row][col] === 1
+  ) {
+    stack.push([row, col]);
   }
 }
 
 function helper (grid, row, col) {
-    const queue = [[row, col]];
-    while (queue.length) {
-      [currentRow, currentCol] = queue.shift();
-      if (grid[currentRow][currentCol] === 1) {       // helper should still check if the coordinates point to land
-        grid[currentRow][currentCol] = 0;
-        pushIfInBounds(grid, currentRow - 1, currentCol, queue);    // if not in bounds, do not even push into queue
-        pushIfInBounds(grid, currentRow + 1, currentCol, queue);
-        pushIfInBounds(grid, currentRow, currentCol - 1, queue);
-        pushIfInBounds(grid, currentRow, currentCol + 1, queue);
-      }
-    }
+  const stack = [[row, col]];
+  while (stack.length) {
+    [currentRow, currentCol] = stack.pop();
+    grid[currentRow][currentCol] = 0;
+    pushIfInBoundsAndContainsLand(grid, currentRow - 1, currentCol, stack);     // only push into stack if in bounds and contains land
+    pushIfInBoundsAndContainsLand(grid, currentRow + 1, currentCol, stack);
+    pushIfInBoundsAndContainsLand(grid, currentRow, currentCol - 1, stack);
+    pushIfInBoundsAndContainsLand(grid, currentRow, currentCol + 1, stack);
+  }
 }
 ```
 
@@ -176,9 +179,8 @@ function helper (grid, row, col) {
 Key concepts in this problem:
 - matrix traversal
 - helper function
-- recursion vs. queue
+- recursion vs. stack
 - micro-optimization by checking validity (being in-bounds)
-- potential edge cases arising from cells being enqueued multiple times, depending on implementation
 
 ## References
 
